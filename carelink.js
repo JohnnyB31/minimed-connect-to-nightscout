@@ -8,11 +8,8 @@ var _ = require('lodash'),
 var logger = require('./logger');
 
 var DEFAULT_MAX_RETRY_DURATION = module.exports.defaultMaxRetryDuration = 512;
-if (process.env['MMCONNECT_SERVER'] === 'EU') {
-  var carelinkServerAddress = "carelink.minimed.eu";
-} else {
-  var carelinkServerAddress = "carelink.minimed.com";
-}
+var carelinkServerAddress = "carelink.minimed.eu";
+ 
 
 var CARELINK_SECURITY_URL = 'https://' + carelinkServerAddress + '/patient/j_security_check';
 var CARELINK_AFTER_LOGIN_URL = 'https://' + carelinkServerAddress + '/patient/main/login.do';
@@ -90,7 +87,8 @@ var Client = exports.Client = function (options) {
       CARELINK_SECURITY_URL,
       reqOptions({
         jar: jar,
-        qs: {j_username: options.username, j_password: options.password}
+        //qs: {j_username: options.username, j_password: options.password}
+        form: {j_username: options.username, j_password: options.password, j_character_encoding: "UTF-8"}
       }),
       checkResponseThen(next)
     );
